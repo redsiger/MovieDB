@@ -13,7 +13,7 @@ import com.example.androidschool.moviedb.network.response.MovieSearchResponse
 
 class StartFragmentAdapter(
     private val context: Context,
-    private val movieList: MutableList<Movie>
+    private val movieList: List<Movie>
 ) : RecyclerView.Adapter<StartFragmentAdapter.MovieSearchResponseHolder>() {
 
     class MovieSearchResponseHolder(view : View) : RecyclerView.ViewHolder(view) {
