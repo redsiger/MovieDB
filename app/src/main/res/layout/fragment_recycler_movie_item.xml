@@ -12,15 +12,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/item_movie_img"
-            android:layout_width="@dimen/item_movie_img_width"
-            android:layout_height="@dimen/item_movie_img_height"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/item_movie_img_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/app_margin"
-            android:background="@color/black"
+            app:cardElevation="@dimen/movie_img_elevation"
+            app:cardCornerRadius="@dimen/movie_img_corner_radius"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/item_movie_img"
+                android:layout_width="@dimen/item_movie_img_width"
+                android:layout_height="@dimen/item_movie_img_height"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+        </androidx.cardview.widget.CardView>
+
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +42,7 @@
             android:layout_margin="@dimen/app_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/item_movie_img"
+            app:layout_constraintStart_toEndOf="@id/item_movie_img_container"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintHorizontal_bias="0">

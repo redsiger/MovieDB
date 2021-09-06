@@ -8,6 +8,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 const val BASE_URL = "https://api.themoviedb.org/3/"
 const val API_KEY = "bfe801649ca860d496a1b7a533405418"
@@ -19,6 +20,9 @@ interface MovieApi {
 //    https://api.themoviedb.org/3/movie/popular?api_key=bfe801649ca860d496a1b7a533405418
     @GET("movie/popular")
     fun getMovieList() : Call<MovieSearchResponse>
+
+    @GET("search/movie")
+    fun getSearchResult(@Query("query") searchQuery: String) : Call<MovieSearchResponse>
 
     companion object {
         operator fun invoke() : MovieApi {

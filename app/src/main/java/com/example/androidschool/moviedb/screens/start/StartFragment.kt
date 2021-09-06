@@ -9,8 +9,13 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.androidschool.moviedb.MovieApp
 import com.example.androidschool.moviedb.databinding.FragmentStartBinding
+import com.example.androidschool.moviedb.network.MovieService
+import com.example.androidschool.moviedb.network.MoviesListener
+import com.example.androidschool.moviedb.network.response.Movie
 import com.example.androidschool.moviedb.screens.adapter.start.StartFragmentAdapter
+import com.example.androidschool.moviedb.screens.adapter.start.StartFragmentAdapter2
 
 class StartFragment : Fragment(), LifecycleObserver {
 
@@ -18,6 +23,7 @@ class StartFragment : Fragment(), LifecycleObserver {
     private val mBinding get() = _binding!!
     lateinit var mAdapter : StartFragmentAdapter
     lateinit var mViewModel: StartFragmentViewModel
+    lateinit var mMovieListObserver: Observer<List<Movie>>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,6 +31,7 @@ class StartFragment : Fragment(), LifecycleObserver {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentStartBinding.inflate(inflater, container, false)
+
         val view = mBinding.root
         return (view)
     }
@@ -33,11 +40,23 @@ class StartFragment : Fragment(), LifecycleObserver {
         super.onViewCreated(view, savedInstanceState)
     }
 
+
     override fun onStart() {
         super.onStart()
         val layoutManager = LinearLayoutManager(this.requireContext())
         mBinding.recyclerMovieList.layoutManager = layoutManager
-        mViewModel = ViewModelProvider(this).get(StartFragmentViewModel::class.java)
+        mViewModel = ViewModelProvider(this.requireActivity()).get(StartFragmentViewModel::class.java)
+        mAdapter = StartFragmentAdapter(this.requireContext())
+        mBinding.recyclerMovieList.adapter = mAdapter
+
+        mBinding.startFragmentSearchButton.setOnClickListener {
+            val queryString :String = mBinding.startFragmentSearchInput.text.toString()
+            mViewModel.searchMovies(queryString)
+        }
+
+        mMovieListObserver = Observer {
+            mAdapter.setList(it)
+        }
 
         mViewModel.isMoviesLoaded.observe(this, Observer {
             if (it == true) {
@@ -45,39 +64,13 @@ class StartFragment : Fragment(), LifecycleObserver {
             }
         })
 
-        mViewModel.recyclerListData.observe(viewLifecycleOwner, Observer {
-            mAdapter = StartFragmentAdapter(this.requireContext(), it)
-            mAdapter.notifyDataSetChanged()
-            mBinding.recyclerMovieList.adapter = mAdapter
-        })
-
-//        GlobalScope.launch(Dispatchers.IO) {
-//            GlobalScope.launch(Dispatchers.Main) {
-//                mBinding.progressBar.visibility = View.GONE
-//            }
-//        }
+        mViewModel.recyclerListData.observe(viewLifecycleOwner, mMovieListObserver)
     }
 
-
-    //    private fun getAllMovieList() {
-//        val apiService = MovieApi().getMovieList()
-//        apiService.enqueue(object: retrofit2.Callback<MovieSearchResponse> {
-//            override fun onResponse(
-//                call: Call<MovieSearchResponse>,
-//                response: Response<MovieSearchResponse>
-//            ) {
-//                val movieSearchResponse = response.body() as MovieSearchResponse
-//                val movies = movieSearchResponse.results as MutableList
-//                mAdapter = StartFragmentAdapter(this@StartFragment.requireContext(), movies)
-//                mAdapter.notifyDataSetChanged()
-//                mBinding.recyclerMovieList.adapter = mAdapter
-//            }
-//
-//            override fun onFailure(call: Call<MovieSearchResponse>, t: Throwable) {
-//                Log.e("ERROR", "Something going wrong... ${t.message}")
-//            }
-//        })
-//    }
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        mBinding.recyclerMovieList.adapter = null
+        mViewModel.recyclerListData.removeObserver(mMovieListObserver)
+    }
 }

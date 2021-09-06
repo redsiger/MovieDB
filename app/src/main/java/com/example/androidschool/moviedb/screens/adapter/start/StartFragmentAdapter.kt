@@ -14,9 +14,15 @@ import com.example.androidschool.moviedb.network.response.MovieSearchResponse
 import com.squareup.picasso.Picasso
 
 class StartFragmentAdapter(
-    private val context: Context,
-    private val movieList: List<Movie>
+    private val context: Context
 ) : RecyclerView.Adapter<StartFragmentAdapter.MovieSearchResponseHolder>() {
+
+    private var movieList: List<Movie> = emptyList()
+
+    fun setList(list: List<Movie>) {
+        movieList = list
+        notifyDataSetChanged()
+    }
 
     class MovieSearchResponseHolder(view : View) : RecyclerView.ViewHolder(view) {
         val mBinding = FragmentRecyclerMovieItemBinding.bind(view)
