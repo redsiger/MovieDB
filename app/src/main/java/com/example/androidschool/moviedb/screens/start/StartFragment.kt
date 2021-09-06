@@ -1,27 +1,16 @@
 package com.example.androidschool.moviedb.screens.start
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidschool.moviedb.databinding.FragmentStartBinding
-import com.example.androidschool.moviedb.network.MovieApi
-import com.example.androidschool.moviedb.network.response.MovieSearchResponse
 import com.example.androidschool.moviedb.screens.adapter.start.StartFragmentAdapter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Response
-import javax.security.auth.callback.Callback
 
 class StartFragment : Fragment(), LifecycleObserver {
 
@@ -52,11 +41,11 @@ class StartFragment : Fragment(), LifecycleObserver {
 
         mViewModel.isMoviesLoaded.observe(this, Observer {
             if (it == true) {
-                mBinding.progressBar.visibility = View.GONE
+                mBinding.progressBarFragmentStart.visibility = View.GONE
             }
         })
 
-        mViewModel.recyclerListData.observe(this, Observer {
+        mViewModel.recyclerListData.observe(viewLifecycleOwner, Observer {
             mAdapter = StartFragmentAdapter(this.requireContext(), it)
             mAdapter.notifyDataSetChanged()
             mBinding.recyclerMovieList.adapter = mAdapter

@@ -8,8 +8,10 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidschool.moviedb.R
 import com.example.androidschool.moviedb.databinding.FragmentRecyclerMovieItemBinding
+import com.example.androidschool.moviedb.network.TMBD_IMG_URL
 import com.example.androidschool.moviedb.network.response.Movie
 import com.example.androidschool.moviedb.network.response.MovieSearchResponse
+import com.squareup.picasso.Picasso
 
 class StartFragmentAdapter(
     private val context: Context,
@@ -18,10 +20,29 @@ class StartFragmentAdapter(
 
     class MovieSearchResponseHolder(view : View) : RecyclerView.ViewHolder(view) {
         val mBinding = FragmentRecyclerMovieItemBinding.bind(view)
-        fun bind(movie: Movie) {
-            mBinding.itemMovieTitle.text = movie.title
+
+        fun bind(movie: Movie) = with(mBinding) {
+            itemMovieTitle.text = movie.title
+            itemMovieYear.text = movie.releaseDate
+            itemMovieDesc.text = movie.overview
+
+
+            Picasso.get().load(TMBD_IMG_URL + movie.posterPath).resizeDimen(R.dimen.item_movie_img_width, R.dimen.item_movie_img_height).into(itemMovieImg)
+        }
+
+        private fun trimDesc(string: String) : String {
+            if (string.length <= 150) {
+                return string
+            }
+            return string.substring(0, 147) + "..."
+        }
+
+        private fun trimDate(string: String) :String {
+            return string.substring(0, 4)
         }
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieSearchResponseHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_recycler_movie_item, parent, false)

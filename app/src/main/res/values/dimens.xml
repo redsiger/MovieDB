@@ -5,4 +5,7 @@
     <dimen name="app_margin">16dp</dimen>
     <dimen name="app_large_text">20sp</dimen>
     <dimen name="app_normal_text">16sp</dimen>
+    <dimen name="title_bottom_margin">4dp</dimen>
+    <dimen name="item_movie_img_width">90dp</dimen>
+    <dimen name="item_movie_img_height">135dp</dimen>
 </resources>

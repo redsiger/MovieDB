@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="style_movie_title">
+        <item name="android:textColor">@color/design_default_color_primary_dark</item>
+        <item name="android:textSize">@dimen/app_large_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

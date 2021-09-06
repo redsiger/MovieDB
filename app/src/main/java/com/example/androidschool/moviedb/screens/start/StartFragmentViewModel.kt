@@ -5,20 +5,18 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.androidschool.moviedb.network.MovieApi
 import com.example.androidschool.moviedb.network.response.Movie
 import com.example.androidschool.moviedb.network.response.MovieSearchResponse
-import com.example.androidschool.moviedb.screens.adapter.start.StartFragmentAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
 class StartFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
+    var _recyclerListData : MutableLiveData<List<Movie>> = MutableLiveData()
     lateinit var recyclerListData : MutableLiveData<List<Movie>>
     lateinit var isMoviesLoaded : MutableLiveData<Boolean>
 
@@ -26,7 +24,6 @@ class StartFragmentViewModel(application: Application) : AndroidViewModel(applic
         recyclerListData = MutableLiveData()
         isMoviesLoaded = MutableLiveData()
         GlobalScope.launch(Dispatchers.IO) {
-            delay(5000)
             getAllMovieList()
         }
     }
@@ -35,13 +32,14 @@ class StartFragmentViewModel(application: Application) : AndroidViewModel(applic
         isMoviesLoaded.postValue(true)
     }
 
+
     private fun getAllMovieList() {
         val apiService = MovieApi().getMovieList()
         apiService.enqueue(object: retrofit2.Callback<MovieSearchResponse> {
             override fun onResponse(call: Call<MovieSearchResponse>, response: Response<MovieSearchResponse>) {
                 if (response.isSuccessful) {
                     val movieSearchResponse = response.body() as MovieSearchResponse
-                    val movies = movieSearchResponse.results as List<Movie>
+                    val movies = movieSearchResponse.results
                     recyclerListData.postValue(movies)
                     isMovieListLoaded()
                 } else {
