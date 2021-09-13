@@ -23,8 +23,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/item_movie_img"
+                tools:src="@drawable/ic_launcher_foreground"
+                tools:scaleType="centerCrop"
+                tools:background="@color/black"
                 android:layout_width="@dimen/item_movie_img_width"
                 android:layout_height="@dimen/item_movie_img_height"
                 app:layout_constraintBottom_toBottomOf="parent"

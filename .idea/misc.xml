@@ -3,9 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/MovieDB/app/src/main/res/drawable/movie_img_background.xml" value="0.22135416666666666" />
+        <entry key="..\:/AndroidStudioProjects/MovieDB/app/src/main/res/drawable/movie_img_loading_anim.xml" value="0.22135416666666666" />
         <entry key="..\:/AndroidStudioProjects/MovieDB/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/MovieDB/app/src/main/res/layout/fragment_recycler_movie_item.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/MovieDB/app/src/main/res/layout/fragment_recycler_movie_items_loading.xml" value="0.20520833333333333" />
+        <entry key="..\:/AndroidStudioProjects/MovieDB/app/src/main/res/layout/fragment_search.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/MovieDB/app/src/main/res/layout/fragment_start.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/MovieDB/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20520833333333333" />
         <entry key="..\:/Soft/AndroidStudioProjects/MovieDB/app/src/main/res/drawable/movie_img_background.xml" value="0.2703125" />
         <entry key="..\:/Soft/AndroidStudioProjects/MovieDB/app/src/main/res/layout/fragment_recycler_movie_item.xml" value="0.2" />
         <entry key="..\:/Soft/AndroidStudioProjects/MovieDB/app/src/main/res/layout/fragment_recycler_movie_item_details.xml" value="0.2" />

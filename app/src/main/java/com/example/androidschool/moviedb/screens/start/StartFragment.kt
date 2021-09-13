@@ -16,6 +16,7 @@ import com.example.androidschool.moviedb.network.MoviesListener
 import com.example.androidschool.moviedb.network.response.Movie
 import com.example.androidschool.moviedb.screens.adapter.start.StartFragmentAdapter
 import com.example.androidschool.moviedb.screens.adapter.start.StartFragmentAdapter2
+import kotlin.random.Random
 
 class StartFragment : Fragment(), LifecycleObserver {
 
@@ -24,6 +25,7 @@ class StartFragment : Fragment(), LifecycleObserver {
     lateinit var mAdapter : StartFragmentAdapter
     lateinit var mViewModel: StartFragmentViewModel
     lateinit var mMovieListObserver: Observer<List<Movie>>
+    lateinit var mMovieListLoadedObserver: Observer<Boolean>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +35,13 @@ class StartFragment : Fragment(), LifecycleObserver {
         _binding = FragmentStartBinding.inflate(inflater, container, false)
 
         val view = mBinding.root
+
+        initialize()
         return (view)
+    }
+
+    private fun refreshMovieList() {
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,34 +51,51 @@ class StartFragment : Fragment(), LifecycleObserver {
 
     override fun onStart() {
         super.onStart()
+    }
+
+    private fun initialize() {
+        mBinding.startFragmentMoviesRefresh.setOnRefreshListener {
+            val queryStringsList = listOf<String>("Naruto", "Star Wars", "Sex Education", "Marvel")
+            val queryString = queryStringsList[(0..queryStringsList.size-1).random()]
+            mViewModel.searchMovies(queryString)
+//            mBinding.startFragmentSearchInput.setText(queryString)
+            mBinding.startFragmentMoviesRefresh.isRefreshing = false
+        }
+
+
         val layoutManager = LinearLayoutManager(this.requireContext())
         mBinding.recyclerMovieList.layoutManager = layoutManager
         mViewModel = ViewModelProvider(this.requireActivity()).get(StartFragmentViewModel::class.java)
         mAdapter = StartFragmentAdapter(this.requireContext())
         mBinding.recyclerMovieList.adapter = mAdapter
 
-        mBinding.startFragmentSearchButton.setOnClickListener {
-            val queryString :String = mBinding.startFragmentSearchInput.text.toString()
-            mViewModel.searchMovies(queryString)
-        }
+//
 
         mMovieListObserver = Observer {
             mAdapter.setList(it)
         }
-
-        mViewModel.isMoviesLoaded.observe(this, Observer {
-            if (it == true) {
-                mBinding.progressBarFragmentStart.visibility = View.GONE
+        mMovieListLoadedObserver = Observer {
+            when (it) {
+                true -> {
+                    mBinding.progressBarFragmentStart.visibility = View.GONE
+                    mBinding.recyclerMovieList.visibility = View.VISIBLE
+                }
+                false -> {
+                    mBinding.recyclerMovieList.visibility = View.GONE
+                    mBinding.progressBarFragmentStart.visibility = View.VISIBLE
+                }
             }
-        })
+        }
+
+        mViewModel.isMoviesLoaded.observe(viewLifecycleOwner, mMovieListLoadedObserver)
 
         mViewModel.recyclerListData.observe(viewLifecycleOwner, mMovieListObserver)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
         mBinding.recyclerMovieList.adapter = null
+        _binding = null
         mViewModel.recyclerListData.removeObserver(mMovieListObserver)
     }
 }
